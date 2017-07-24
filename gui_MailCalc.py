@@ -28,7 +28,7 @@ class MailCalc:
         
         self.build_grid()
         self.build_banner()
-        self.build_flat_grid()
+        self.build_sm_grid()
         self.build_calc()
         
 #        self.build_buttons()
@@ -50,7 +50,7 @@ class MailCalc:
         banner_frame.rowconfigure(0,weight=1)
         banner_frame.rowconfigure(1,weight=1)
 
-        COMP_TYPES = ["Flat","Booklet","Envelope"]
+        COMP_TYPES = ["Self Mailer","Insert","Booklet","Envelope"]
 
         self.banner = tkinter.Label(
             banner_frame,
@@ -85,8 +85,9 @@ class MailCalc:
         self.comp_type_label.grid(row=1,column=0,sticky="nsew")
         self.comp_type.grid(row=1,column=1,sticky="nsew")
         
+ ##--------------------SELF MAILER GRID--------------------------------------       
 
-    def build_flat_grid(self):
+    def build_sm_grid(self):
         calc_frame = tkinter.Frame(self.mainframe)
         calc_frame.grid(row=1,column=0,sticky="nsew",padx=40)
         calc_frame.columnconfigure(0,weight=1)
@@ -97,19 +98,28 @@ class MailCalc:
 
         size_frame = tkinter.Frame(calc_frame)
         size_frame.grid(row=1,column=0,sticky="nsew")
-        size_frame.columnconfigure(0,weight=10)
-        size_frame.columnconfigure(1,weight=1)
-        size_frame.columnconfigure(2,weight=10)
+        size_frame.columnconfigure(0,weight=15)
+        size_frame.columnconfigure(1,weight=3)
+        size_frame.columnconfigure(2,weight=1)
+        size_frame.columnconfigure(3,weight=3)
         size_frame.rowconfigure(0,weight=1)
         size_frame.rowconfigure(1,weight=1)
 
         self.width = tkinter.DoubleVar()
         self.height = tkinter.DoubleVar()
 
+        self.lbl_flat_size = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="Flat Size:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+
         self.lbl_height = tkinter.Label(
             size_frame,
             bg="white",
-            text="Height",
+            text="H",
             fg="black",
             font=("Helvetica",14),
             )
@@ -125,7 +135,7 @@ class MailCalc:
         self.lbl_width = tkinter.Label(
             size_frame,
             bg="white",
-            text="Width",
+            text="W",
             fg="black",
             font=("Helvetica",14)
             )
@@ -154,13 +164,14 @@ class MailCalc:
             textvariable=self.width
             )
 
-        self.lbl_height.grid(row=0,column=0,stick="ew")
-        self.ent_height.grid(row=1,column=0,stick="ew")
-        self.lbl_X.grid(row=1,column=1,stick="ew")
-        self.lbl_width.grid(row=0,column=2,stick="ew")
-        self.ent_width.grid(row=1,column=2,stick="ew")
+        self.lbl_flat_size.grid(row=1,column=0,sticky="ew")
+        self.lbl_width.grid(row=0,column=1,sticky="ew")
+        self.ent_width.grid(row=1,column=1,sticky="ew")
+        self.lbl_X.grid(row=1,column=2,sticky="ew")
+        self.lbl_height.grid(row=0,column=3,sticky="ew")
+        self.ent_height.grid(row=1,column=3,sticky="ew")
 
-##-----------------------PAPER GRID SECTION--------------------------------------------------
+##PAPER GRID SECTION
 
         paper_frame = tkinter.Frame(calc_frame)
         paper_frame.grid(row=2,column=0,sticky="nsew")
@@ -184,26 +195,45 @@ class MailCalc:
         self.lbl_paper_name = tkinter.Label(
             paper_frame,
             bg="white",
-            text="Paper Name",
+            text="Paper:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+        self.lbl_num_panels = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Number of panels:",
             fg="black",
             font=("Helvetica",14),
             )
 
-        self.lbl_paper_type = tkinter.Label(
+        self.num_panels = tkinter.DoubleVar()
+        self.num_panels.set(1)
+        
+        self.ent_num_panels =tkinter.Entry(
             paper_frame,
             bg="white",
-            text="Paper Type",
             fg="black",
-            font=("Helvetica",14),
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.num_panels
             )
 
-        self.lbl_paper_weight = tkinter.Label(
-            paper_frame,
-            bg="white",
-            text="Paper Weight",
-            fg="black",
-            font=("Helvetica",14)
-            )
+##        self.lbl_paper_type = tkinter.Label(
+##            paper_frame,
+##            bg="white",
+##            text="Paper Type",
+##            fg="black",
+##            font=("Helvetica",14),
+##            )
+##
+##        self.lbl_paper_weight = tkinter.Label(
+##            paper_frame,
+##            bg="white",
+##            text="Paper Weight",
+##            fg="black",
+##            font=("Helvetica",14)
+##            )
 
 
         self.paper_name = tkinter.StringVar()
@@ -218,35 +248,247 @@ class MailCalc:
         self.paper_type = tkinter.StringVar()
         self.paper_type.set(PAPER_TYPES[0])
      
-        self.opt_paper_type =tkinter.OptionMenu(
-            paper_frame,
-            self.paper_type,
-            *PAPER_TYPES,
-            command = self.refresh_paper_list
+##        self.opt_paper_type =tkinter.OptionMenu(
+##            paper_frame,
+##            self.paper_type,
+##            *PAPER_TYPES,
+##            command = self.refresh_paper_list
+##            )
+##
+##        self.paper_weight = tkinter.StringVar()
+##        self.paper_weight.set(PAPER_WEIGHTS[0])       
+##
+##        self.opt_paper_weight =tkinter.OptionMenu(
+##            paper_frame,
+##            self.paper_weight,
+##            *PAPER_WEIGHTS,
+##            command = self.refresh_paper_list
+##            )
+
+
+        self.lbl_paper_name.grid(row=0,column=0,sticky="ew")
+        self.opt_paper_name.grid(row=0,column=1,sticky="ew",columnspan=2)
+        self.lbl_num_panels.grid(row=2,column=0,sticky="ew")
+        self.ent_num_panels.grid(row=2,column=1,sticky="ew")
+##        self.lbl_paper_type.grid(row=2,column=0,sticky="ew",columnspan=2)
+##        self.opt_paper_type.grid(row=3,column=0,sticky="ew",columnspan=2)
+##        self.lbl_paper_weight.grid(row=2,column=2,sticky="ew",columnspan=2)
+##        self.opt_paper_weight.grid(row=3,column=2,sticky="ew",columnspan=2)        
+
+ ##--------------------INSERTS GRID--------------------------------------       
+
+    def build_insert_grid(self):
+        calc_frame = tkinter.Frame(self.mainframe)
+        calc_frame.grid(row=1,column=0,sticky="nsew",padx=40)
+        calc_frame.columnconfigure(0,weight=1)
+        calc_frame.rowconfigure(0,weight=1)
+        calc_frame.rowconfigure(1,weight=1)
+        calc_frame.rowconfigure(2,weight=1)
+        calc_frame.rowconfigure(3,weight=1)
+
+        size_frame = tkinter.Frame(calc_frame)
+        size_frame.grid(row=1,column=0,sticky="nsew")
+        size_frame.columnconfigure(0,weight=15)
+        size_frame.columnconfigure(1,weight=3)
+        size_frame.columnconfigure(2,weight=1)
+        size_frame.columnconfigure(2,weight=13)
+        size_frame.rowconfigure(0,weight=1)
+        size_frame.rowconfigure(1,weight=1)
+
+        self.width = tkinter.DoubleVar()
+        self.height = tkinter.DoubleVar()
+
+        self.lbl_flat_size = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="Flat Size:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+        
+        self.lbl_height = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="H",
+            fg="black",
+            font=("Helvetica",14),
             )
 
-        self.paper_weight = tkinter.StringVar()
-        self.paper_weight.set(PAPER_WEIGHTS[0])       
-
-        self.opt_paper_weight =tkinter.OptionMenu(
-            paper_frame,
-            self.paper_weight,
-            *PAPER_WEIGHTS,
-            command = self.refresh_paper_list
+        self.lbl_X = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="X",
+            fg="black",
+            font=("Helvetica",14)
             )
 
+        self.lbl_width = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="W",
+            fg="black",
+            font=("Helvetica",14)
+            )
 
-        self.lbl_paper_name.grid(row=0,column=1,stick="ew",columnspan=2)
-        self.opt_paper_name.grid(row=1,column=1,stick="ew",columnspan=2)
-        self.lbl_paper_type.grid(row=2,column=0,stick="ew",columnspan=2)
-        self.opt_paper_type.grid(row=3,column=0,stick="ew",columnspan=2)
-        self.lbl_paper_weight.grid(row=2,column=2,stick="ew",columnspan=2)
-        self.opt_paper_weight.grid(row=3,column=2,stick="ew",columnspan=2)        
- 
+        self.height = tkinter.DoubleVar()
+        self.height.set(0)
+        
+        self.ent_height =tkinter.Entry(
+            size_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.height
+            )
 
-##-----------------------ENVELOPE GRID SECTION--------------------------------------------------
-    def build_envelope_grid(self):
+        self.width = tkinter.DoubleVar()
+        self.width.set(0)
+        
+        self.ent_width =tkinter.Entry(
+            size_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.width
+            )
 
+        self.lbl_flat_size.grid(row=1,column=0,sticky="ew")
+        self.lbl_width.grid(row=0,column=1,sticky="ew")
+        self.ent_width.grid(row=1,column=1,sticky="ew")
+        self.lbl_X.grid(row=1,column=2,sticky="ew")
+        self.lbl_height.grid(row=0,column=3,sticky="ew")
+        self.ent_height.grid(row=1,column=3,sticky="ew")
+
+##PAPER GRID SECTION
+
+        paper_frame = tkinter.Frame(calc_frame)
+        paper_frame.grid(row=2,column=0,sticky="nsew")
+        paper_frame.columnconfigure(0,weight=10)
+        paper_frame.columnconfigure(1,weight=10)
+        paper_frame.columnconfigure(2,weight=10)
+        paper_frame.columnconfigure(3,weight=10)
+        paper_frame.rowconfigure(0,weight=1)
+        paper_frame.rowconfigure(1,weight=1)
+        paper_frame.rowconfigure(2,weight=1)
+        paper_frame.rowconfigure(3,weight=1)
+
+        
+
+        PAPER_NAMES = self.paperDB.get_papers()
+        PAPER_WEIGHTS = self.paperDB.get_unique_paper_weight()
+        PAPER_WEIGHTS.insert(0,'ALL')
+        PAPER_TYPES = self.paperDB.get_unique_paper_type()
+        PAPER_TYPES.insert(0,'ALL')
+
+        self.lbl_paper_name = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Paper:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+        self.lbl_num_panels = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Number of panels:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+        self.lbl_num_pages = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Number of pages:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+
+        self.num_panels = tkinter.DoubleVar()
+        self.num_panels.set(1)
+        
+        self.ent_num_panels =tkinter.Entry(
+            paper_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.num_panels
+            )
+
+        self.num_pages = tkinter.DoubleVar()
+        self.num_pages.set(1)
+        
+        self.ent_num_pages =tkinter.Entry(
+            paper_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.num_pages
+            )
+
+##        self.lbl_paper_type = tkinter.Label(
+##            paper_frame,
+##            bg="white",
+##            text="Paper Type",
+##            fg="black",
+##            font=("Helvetica",14),
+##            )
+##
+##        self.lbl_paper_weight = tkinter.Label(
+##            paper_frame,
+##            bg="white",
+##            text="Paper Weight",
+##            fg="black",
+##            font=("Helvetica",14)
+##            )
+
+
+        self.paper_name = tkinter.StringVar()
+        self.paper_name.set(PAPER_NAMES[0])
+
+        self.opt_paper_name =tkinter.OptionMenu(
+            paper_frame,
+            self.paper_name,
+            *PAPER_NAMES
+            )
+
+        self.paper_type = tkinter.StringVar()
+        self.paper_type.set(PAPER_TYPES[0])
+     
+##        self.opt_paper_type =tkinter.OptionMenu(
+##            paper_frame,
+##            self.paper_type,
+##            *PAPER_TYPES,
+##            command = self.refresh_paper_list
+##            )
+##
+##        self.paper_weight = tkinter.StringVar()
+##        self.paper_weight.set(PAPER_WEIGHTS[0])       
+##
+##        self.opt_paper_weight =tkinter.OptionMenu(
+##            paper_frame,
+##            self.paper_weight,
+##            *PAPER_WEIGHTS,
+##            command = self.refresh_paper_list
+##            )
+
+
+        self.lbl_paper_name.grid(row=0,column=0,sticky="ew")
+        self.opt_paper_name.grid(row=0,column=1,sticky="ew",columnspan=2)
+        self.lbl_num_panels.grid(row=1,column=0,sticky="ew")
+        self.ent_num_panels.grid(row=1,column=1,sticky="ew")
+        self.lbl_num_pages.grid(row=2,column=0,sticky="ew")
+        self.ent_num_pages.grid(row=2,column=1,sticky="ew")
+##        self.lbl_paper_type.grid(row=2,column=0,sticky="ew",columnspan=2)
+##        self.opt_paper_type.grid(row=3,column=0,sticky="ew",columnspan=2)
+##        self.lbl_paper_weight.grid(row=2,column=2,sticky="ew",columnspan=2)
+##        self.opt_paper_weight.grid(row=3,column=2,sticky="ew",columnspan=2)
+
+ ##--------------------BOOKLETS GRID--------------------------------------       
+
+    def build_booklet_grid(self):
         calc_frame = tkinter.Frame(self.mainframe)
         calc_frame.grid(row=1,column=0,sticky="nsew",padx=40)
         calc_frame.columnconfigure(0,weight=1)
@@ -262,17 +504,239 @@ class MailCalc:
         size_frame.columnconfigure(2,weight=10)
         size_frame.rowconfigure(0,weight=1)
         size_frame.rowconfigure(1,weight=1)
+
+        self.width = tkinter.DoubleVar()
+        self.height = tkinter.DoubleVar()
+
+        self.lbl_finished_size = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="Finished Size:",
+            fg="black",
+            font=("Helvetica",14),
+            )
+
+        self.lbl_height = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="H",
+            fg="black",
+            font=("Helvetica",14),
+            )
+
+        self.lbl_X = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="X",
+            fg="black",
+            font=("Helvetica",14)
+            )
+
+        self.lbl_width = tkinter.Label(
+            size_frame,
+            bg="white",
+            text="W",
+            fg="black",
+            font=("Helvetica",14)
+            )
+
+        self.height = tkinter.DoubleVar()
+        self.height.set(0)
+        
+        self.ent_height =tkinter.Entry(
+            size_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.height
+            )
+
+        self.width = tkinter.DoubleVar()
+        self.width.set(0)
+        
+        self.ent_width =tkinter.Entry(
+            size_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.width
+            )
+
+        self.lbl_finished_size.grid(row=1,column=0,sticky="ew")
+        self.lbl_width.grid(row=0,column=1,sticky="ew")
+        self.ent_width.grid(row=1,column=1,sticky="ew")
+        self.lbl_X.grid(row=1,column=2,sticky="ew")
+        self.lbl_height.grid(row=0,column=3,sticky="ew")
+        self.ent_height.grid(row=1,column=3,sticky="ew")
+
+##PAPER GRID SECTION
+
         paper_frame = tkinter.Frame(calc_frame)
         paper_frame.grid(row=2,column=0,sticky="nsew")
         paper_frame.columnconfigure(0,weight=10)
         paper_frame.columnconfigure(1,weight=10)
+        paper_frame.columnconfigure(2,weight=10)
+        paper_frame.columnconfigure(3,weight=10)
+        paper_frame.rowconfigure(0,weight=1)
+        paper_frame.rowconfigure(1,weight=1)
+        paper_frame.rowconfigure(2,weight=1)
+        paper_frame.rowconfigure(3,weight=1)
+
+        
+
+        PAPER_NAMES = self.paperDB.get_papers()
+        PAPER_WEIGHTS = self.paperDB.get_unique_paper_weight()
+        PAPER_WEIGHTS.insert(0,'ALL')
+        PAPER_TYPES = self.paperDB.get_unique_paper_type()
+        PAPER_TYPES.insert(0,'ALL')
+
+        self.lbl_is_self_cover = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Self cover?",
+            fg="black",
+            font=("Helvetica",14),
+            )
+                
+        self.lbl_cvr_paper_name = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Cover Paper",
+            fg="black",
+            font=("Helvetica",14),
+            )
+        self.lbl_txt_paper_name = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Text Paper",
+            fg="black",
+            font=("Helvetica",14),
+            )
+
+        self.lbl_num_pages = tkinter.Label(
+            paper_frame,
+            bg="white",
+            text="Number of pages",
+            fg="black",
+            font=("Helvetica",14),
+            )
+
+        self.num_pages = tkinter.DoubleVar()
+        self.num_pages.set(8)
+        
+        self.ent_num_pages =tkinter.Entry(
+            paper_frame,
+            bg="white",
+            fg="black",
+            width=10,
+            justify=tkinter.CENTER,
+            textvariable=self.num_pages
+            )
+
+##        self.lbl_paper_type = tkinter.Label(
+##            paper_frame,
+##            bg="white",
+##            text="Paper Type",
+##            fg="black",
+##            font=("Helvetica",14),
+##            )
+##
+##        self.lbl_paper_weight = tkinter.Label(
+##            paper_frame,
+##            bg="white",
+##            text="Paper Weight",
+##            fg="black",
+##            font=("Helvetica",14)
+##            )
+
+
+        self.cvr_paper_name = tkinter.StringVar()
+        self.cvr_paper_name.set(PAPER_NAMES[0])
+
+        self.opt_cvr_paper_name =tkinter.OptionMenu(
+            paper_frame,
+            self.cvr_paper_name,
+            *PAPER_NAMES
+            )
+
+        self.txt_paper_name = tkinter.StringVar()
+        self.txt_paper_name.set(PAPER_NAMES[0])
+
+        self.opt_txt_paper_name =tkinter.OptionMenu(
+            paper_frame,
+            self.txt_paper_name,
+            *PAPER_NAMES
+            )
+
+        self.is_self_cover = tkinter.StringVar()
+        self.is_self_cover.set("No")
+
+
+        self.opt_is_self_cover = tkinter.OptionMenu(
+            paper_frame,
+            self.is_self_cover,
+            "No",
+            "Yes",
+            command = self.toggle_cover_option
+            )
+        
+##        self.paper_type = tkinter.StringVar()
+##        self.paper_type.set(PAPER_TYPES[0])
+     
+##        self.opt_paper_type =tkinter.OptionMenu(
+##            paper_frame,
+##            self.paper_type,
+##            *PAPER_TYPES,
+##            command = self.refresh_paper_list
+##            )
+##
+##        self.paper_weight = tkinter.StringVar()
+##        self.paper_weight.set(PAPER_WEIGHTS[0])       
+##
+##        self.opt_paper_weight =tkinter.OptionMenu(
+##            paper_frame,
+##            self.paper_weight,
+##            *PAPER_WEIGHTS,
+##            command = self.refresh_paper_list
+##            )
+
+        self.lbl_is_self_cover.grid(row=0,column=0,sticky="ew")
+        self.opt_is_self_cover.grid(row=0,column=1,sticky="ew")
+        self.lbl_cvr_paper_name.grid(row=1,column=0,sticky="ew")
+        self.opt_cvr_paper_name.grid(row=1,column=1,sticky="ew",columnspan=2)
+        self.lbl_txt_paper_name.grid(row=2,column=0,sticky="ew")
+        self.opt_txt_paper_name.grid(row=2,column=1,sticky="ew",columnspan=2)
+        self.lbl_num_panels.grid(row=3,column=0,sticky="ew")
+        self.ent_num_panels.grid(row=3,column=1,sticky="ew")
+        self.lbl_num_pages.grid(row=4,column=0,sticky="ew")
+        self.ent_num_pages.grid(row=4,column=1,sticky="ew")
+##        self.lbl_paper_type.grid(row=2,column=0,sticky="ew",columnspan=2)
+##        self.opt_paper_type.grid(row=3,column=0,sticky="ew",columnspan=2)
+##        self.lbl_paper_weight.grid(row=2,column=2,sticky="ew",columnspan=2)
+##        self.opt_paper_weight.grid(row=3,column=2,sticky="ew",columnspan=2) 
+
+##-----------------------ENVELOPE GRID SECTION--------------------------------------------------
+    def build_envelope_grid(self):
+
+        calc_frame = tkinter.Frame(self.mainframe)
+        calc_frame.grid(row=1,column=0,sticky="nsew",padx=40)
+        calc_frame.columnconfigure(0,weight=1)
+        calc_frame.rowconfigure(0,weight=1)
+
+        paper_frame = tkinter.Frame(calc_frame)
+        paper_frame.grid(row=0,column=0,sticky="nsew")
+        paper_frame.columnconfigure(0,weight=1)
+        paper_frame.columnconfigure(1,weight=1)
+        paper_frame.columnconfigure(2,weight=1)
+        paper_frame.columnconfigure(3,weight=1)
+        paper_frame.columnconfigure(4,weight=1)
         paper_frame.rowconfigure(0,weight=1)
         paper_frame.rowconfigure(1,weight=1)
 
         PAPER_NAMES = self.paperDB.get_envelopes()
-        PAPER_WEIGHTS = [24,60]
         
-
         self.lbl_paper_name = tkinter.Label(
             paper_frame,
             bg="white",
@@ -280,16 +744,9 @@ class MailCalc:
             fg="black",
             font=("Helvetica",14),
             )
-##
-##        self.lbl_paper_weight = tkinter.Label(
-##            paper_frame,
-##            bg="white",
-##            text="Envelope Weight",
-##            fg="black",
-##            font=("Helvetica",14)
-##            )
 
         self.paper_name = tkinter.StringVar()
+
         if len(PAPER_NAMES) > 0:
             self.paper_name.set(PAPER_NAMES[0])
     
@@ -299,18 +756,8 @@ class MailCalc:
             *PAPER_NAMES
             )
 
-##        self.paper_weight = tkinter.IntVar()
-##        self.paper_weight.set(PAPER_WEIGHTS[0])       
-##
-##        self.opt_paper_weight =tkinter.OptionMenu(
-##            paper_frame,
-##            self.paper_weight,
-##            *PAPER_WEIGHTS
-##            )
-
-
-        self.lbl_paper_name.grid(row=0,column=0,stick="ew")
-        self.opt_paper_name.grid(row=1,column=0,stick="ew")
+        self.lbl_paper_name.grid(row=0,column=2,sticky="ew")
+        self.opt_paper_name.grid(row=1,column=1,sticky="ew",columnspan=3)
            
 
 ##-------------------BUTTON GRID SECTION---------------------------------
@@ -409,20 +856,57 @@ class MailCalc:
         cur_comp_type = self.comp_type_val.get()
         ##ADD SOME INPUT VALIDATION TO NOT COMPONENTS WITH INVALID WIDTH OR HEIGHT
         
-        if cur_comp_type.lower() == "flat":
+        if cur_comp_type.lower() == "self mailer":
             cur_width = self.width.get()
             cur_height = self.height.get()
             cur_paper_name = self.paper_name.get()
             cur_paper_type = self.paperDB.get_paper_type(cur_paper_name)
             cur_paper_weight = self.paperDB.get_paper_weightLB(cur_paper_name)
+            cur_num_panels = self.num_panels.get()
 
             mail_comp = MailComponent(cur_comp_type,width=cur_width,height=cur_height,paper_name=cur_paper_name)
-            self.mail_comps.append((mail_comp.get_weight(),mail_comp.get_caliper()))
+            self.mail_comps.append((mail_comp.get_weight(),mail_comp.get_caliper()*cur_num_panels))
             self.component_list.insert(tkinter.END,mail_comp)
+
         elif cur_comp_type.lower() == "envelope":
-            print("envelope")
-            
-        ##print(self.mail_comps[0].width)
+            env_paper_name = self.paper_name.get()
+            env_mail_comp = MailComponent(cur_comp_type,paper_name=env_paper_name)
+            self.mail_comps.append((env_mail_comp.get_weight(),env_mail_comp.get_caliper()))
+            self.component_list.insert(tkinter.END,env_mail_comp)
+
+        elif cur_comp_type.lower() == "insert":
+
+            cur_width = self.width.get()
+            cur_height = self.height.get()
+            cur_paper_name = self.paper_name.get()
+            cur_num_panels = self.num_panels.get()
+            cur_num_pages = self.num_pages.get()
+
+            mail_comp = MailComponent(cur_comp_type,width=cur_width,height=cur_height,paper_name=cur_paper_name)
+            self.mail_comps.append((mail_comp.get_weight()*cur_num_pages,mail_comp.get_caliper()*cur_num_panels*cur_num_pages))
+            self.component_list.insert(tkinter.END,mail_comp)
+        ##  print(env_mail_comp.get_weight())
+
+        elif cur_comp_type.lower() == "booklet":
+
+            is_self_cover = self.is_self_cover.get()
+            cur_width = self.width.get() * 2
+            cur_height = self.height.get()
+            cur_num_pages = self.num_pages.get() / 4 ##Calculate number of sheets for the booklet
+
+            if is_self_cover.lower() == "no":
+                cur_cvr_paper_name = self.cvr_paper_name.get()
+                cover_mail_comp = MailComponent(cur_comp_type + " Cover",width=cur_width,height=cur_height,paper_name=cur_cvr_paper_name)
+                self.mail_comps.append((cover_mail_comp.get_weight(),cover_mail_comp.get_caliper()*2))
+                self.component_list.insert(tkinter.END,cover_mail_comp)
+                cur_num_pages -=1 
+
+            cur_txt_paper_name = self.txt_paper_name.get()
+            text_mail_comp = MailComponent(cur_comp_type + " Text",width=cur_width,height=cur_height,paper_name=cur_txt_paper_name)
+            self.mail_comps.append((text_mail_comp.get_weight()*cur_num_pages,text_mail_comp.get_caliper()*cur_num_pages*2))
+            self.component_list.insert(tkinter.END,text_mail_comp)
+                
+                
 
     def remove_component(self):
 
@@ -434,7 +918,7 @@ class MailCalc:
             ##delete the component from the list of weights/thicknesses
             del self.mail_comps[cur_selection[0]]
         ##if someone hits the remove button but no item in the list box is selected
-        ##just ignore the error and don't do anything
+       ##just ignore the error and don't do anything
         except IndexError:
              pass
             
@@ -443,8 +927,12 @@ class MailCalc:
 
         if self.component_type == "Envelope":
             self.build_envelope_grid()
-        elif self.component_type == "Flat":
-            self.build_flat_grid()
+        elif self.component_type == "Self Mailer":
+            self.build_sm_grid()
+        elif self.component_type == "Insert":
+            self.build_insert_grid()
+        elif self.component_type == "Booklet":
+            self.build_booklet_grid()
         
         print(self.component_type)
 
@@ -468,6 +956,15 @@ class MailCalc:
         if len(PAPER_NAMES) > 0:
             self.paper_name.set(PAPER_NAMES[0])
 
+    def toggle_cover_option(self,*args):
+
+        is_self_cover = args[0]
+
+        if is_self_cover.lower() == "yes":
+            self.opt_cvr_paper_name.config(state="disabled")
+        elif is_self_cover.lower() == "no":
+            self.opt_cvr_paper_name.config(state="enabled")
+
     def calculate(self,*args):
 
         total_weight = 0
@@ -486,6 +983,7 @@ class MailCalc:
 if __name__ == '__main__':
     
     root = tkinter.Tk()
+    root.title("Mail Piece Calculator")
     MailCalc(root)
     
     root.mainloop()

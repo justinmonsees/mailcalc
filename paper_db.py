@@ -1,5 +1,4 @@
 import sqlite3
-
 class paper_db:
     
     def __init__(self):
@@ -141,7 +140,20 @@ class paper_db:
         self.c.execute(query)
         results = self.c.fetchall()
 
-        print(results)
+        return(results[0][0])
+
+    ##GET ENVELOPE CALIPER
+
+    def get_env_caliper(self,paper_name):
+
+        query = 'SELECT caliper FROM envelope WHERE env_name = ' + '"' + paper_name + '"'
+
+        self.c.execute(query)
+        result = self.c.fetchall()
+
+        caliper = result[0][0]
+
+        return(caliper)
         
         
 
